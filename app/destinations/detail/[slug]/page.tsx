@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getSupabase } from "@/lib/supabase";
 import { DestinationMap } from "@/components/DestinationMap";
+import Image from "next/image";
+import { getDestinationImage } from "@/lib/destination-images";
 
 export const instant = false;
 
@@ -72,6 +74,7 @@ export default async function DestinationDetailPage({ params }: { params: Params
       ? { geo: { "@type": "GeoCoordinates", latitude: destination.lat, longitude: destination.lng } }
       : {}),
   };
+  const destinationImage = getDestinationImage(destination.slug);
 
   return (
     <article className="mx-auto max-w-4xl px-6 py-12">
@@ -95,6 +98,17 @@ export default async function DestinationDetailPage({ params }: { params: Params
       <p className="mt-1 opacity-70">
         {destination.cities?.name}, {destination.cities?.countries?.name}
       </p>
+
+      {destinationImage && (
+        <Image
+          src={destinationImage.src}
+          alt={destinationImage.alt}
+          width={destinationImage.width}
+          height={destinationImage.height}
+          priority
+          className="mt-6 aspect-[16/9] w-full rounded-lg object-cover"
+        />
+      )}
 
       <div className="mt-4 flex flex-wrap gap-2">
         {destination.destination_categories?.map((dc) => (
@@ -143,6 +157,15 @@ export default async function DestinationDetailPage({ params }: { params: Params
                   href={`/destinations/detail/${r.slug}`}
                   className="rounded-full border border-[color:var(--color-sandstone)] px-4 py-2 text-sm no-underline"
                 >
+                  {getDestinationImage(r.slug) && (
+                    <Image
+                      src={getDestinationImage(r.slug)!.src}
+                      alt={getDestinationImage(r.slug)!.alt}
+                      width={getDestinationImage(r.slug)!.width}
+                      height={getDestinationImage(r.slug)!.height}
+                      className="mb-2 h-20 w-32 rounded object-cover"
+                    />
+                  )}
                   {r.name}
                 </Link>
               </li>

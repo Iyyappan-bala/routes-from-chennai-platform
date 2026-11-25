@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getSupabase } from "@/lib/supabase";
+import Image from "next/image";
+import { getDestinationImage } from "@/lib/destination-images";
 
 export const instant = false;
 
@@ -13,7 +15,7 @@ export default async function StoriesPage({ searchParams }: { searchParams: Sear
 
   let query = supabase
     .from("stories")
-    .select("id,title,slug,body,published_at")
+    .select("id,title,slug,body,published_at,destination_stories(destinations(name,slug))")
     .eq("status", "published");
 
   if (q) query = query.ilike("title", `%${q}%`);
@@ -58,6 +60,21 @@ export default async function StoriesPage({ searchParams }: { searchParams: Sear
             href={`/stories/${s.slug}`}
             className="block rounded-lg border border-[color:var(--color-sandstone)] bg-white p-6 no-underline"
           >
+            {(() => {
+              const firstDestination = (s.destination_stories as { destinations: { name: string; slug: string }[] }[] | null)
+                ?.flatMap((link) => link.destinations ?? [])
+                .at(0);
+              const image = firstDestination ? getDestinationImage(firstDestination.slug) : null;
+              return image ? (
+                <Image
+                  src={image.src}
+                  alt={`${image.alt} — featured in this travel story`}
+                  width={image.width}
+                  height={image.height}
+                  className="mb-5 aspect-[16/9] w-full rounded-md object-cover"
+                />
+              ) : null;
+            })()}
             <h2 className="text-2xl text-[color:var(--color-navy)]">{s.title}</h2>
             <p className="mt-2 opacity-80">{s.body.slice(0, 220)}&hellip;</p>
           </Link>

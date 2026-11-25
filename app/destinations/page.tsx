@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getSupabase } from "@/lib/supabase";
+import Image from "next/image";
+import { getDestinationImage } from "@/lib/destination-images";
 
 export const instant = false;
 
@@ -121,6 +123,15 @@ export default async function DestinationsPage({ searchParams }: { searchParams:
             href={`/destinations/detail/${d.slug}`}
             className="block rounded-lg border border-[color:var(--color-sandstone)] bg-white p-6 no-underline transition-transform hover:-translate-y-1"
           >
+            {getDestinationImage(d.slug) && (
+              <Image
+                src={getDestinationImage(d.slug)!.src}
+                alt={getDestinationImage(d.slug)!.alt}
+                width={getDestinationImage(d.slug)!.width}
+                height={getDestinationImage(d.slug)!.height}
+                className="mb-5 aspect-[16/9] w-full rounded-md object-cover"
+              />
+            )}
             <h2 className="text-xl text-[color:var(--color-navy)]">{d.name}</h2>
             <p className="text-sm opacity-70">
               {d.cities?.name}, {d.cities?.countries?.name}

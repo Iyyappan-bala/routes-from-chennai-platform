@@ -11,6 +11,9 @@ export function SiteFooter() {
         <p className="m-0 mb-1 text-xs opacity-80">
           Built with Next.js, Supabase and Cloudflare Workers.
         </p>
+        <p className="m-0 mb-1 text-xs opacity-80">
+          Developed by Iyyappan Balasundaram.
+        </p>
         <p className="m-0 text-xs opacity-80">
           &copy; 2026 Routes From Chennai. All rights reserved.
         </p>

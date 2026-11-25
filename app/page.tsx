@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getSupabase } from "@/lib/supabase";
+import { getDestinationImage } from "@/lib/destination-images";
 
 export const instant = false;
 
@@ -28,6 +29,16 @@ export default async function HomePage() {
   return (
     <div>
       <section className="border-b border-[color:var(--color-sandstone)] px-6 py-20 text-center">
+        {getDestinationImage("marina-beach") && (
+          <Image
+            src={getDestinationImage("marina-beach")!.src}
+            alt="Marina Beach along Chennai's Bay of Bengal coastline"
+            width={getDestinationImage("marina-beach")!.width}
+            height={getDestinationImage("marina-beach")!.height}
+            priority
+            className="mx-auto mb-8 aspect-[16/7] w-full max-w-5xl rounded-lg object-cover"
+          />
+        )}
         <p className="m-0 mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--color-terracotta)]">
           A Travel Discovery &amp; Editorial Platform
         </p>
@@ -55,6 +66,15 @@ export default async function HomePage() {
               href={`/destinations/detail/${d.slug}`}
               className="block rounded-lg border border-[color:var(--color-sandstone)] bg-white p-6 no-underline transition-transform hover:-translate-y-1"
             >
+              {getDestinationImage(d.slug) && (
+                <Image
+                  src={getDestinationImage(d.slug)!.src}
+                  alt={getDestinationImage(d.slug)!.alt}
+                  width={getDestinationImage(d.slug)!.width}
+                  height={getDestinationImage(d.slug)!.height}
+                  className="mb-5 aspect-[16/9] w-full rounded-md object-cover"
+                />
+              )}
               <h3 className="text-xl text-[color:var(--color-navy)]">{d.name}</h3>
               <p className="text-sm opacity-70">
                 {(d.cities as unknown as { name: string; countries: { name: string } } | null)?.name}
